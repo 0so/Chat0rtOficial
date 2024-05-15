@@ -1,0 +1,38 @@
+.usuario {
+    padding: 20px;
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.usuario .user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+
+.usuario img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cerrarSesion {
+    padding: 1px 25px;
+    background-color: rgba(194, 0, 0, 0.89);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    /* cursor: pointer;
+    position: fixed; */
+    /*right: 50px;  O ajusta según sea necesario */
+
+}

@@ -1,0 +1,157 @@
+.chat {
+    flex: 2;
+    border-top: 5px solid black;
+    display: flex;
+    flex-direction: column;
+   /* margin-top: 87px;  Ajusta el valor según sea necesario */
+    background-image: url("fondo.png");
+
+
+}
+
+.chat .top {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid greenyellow;
+}
+
+.chat .user {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    img {
+        width: 60px;
+    }
+
+    .texts {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        span {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 13px;
+            font-weight: bold;
+            color: yellow;
+        }
+    }
+}
+
+.chat .center {
+    padding: 20px;
+    flex: 1;
+    overflow-y: scroll; /* Hacer que el contenedor sea desplazable verticalmente */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: #888 transparent; /* Color del scrollbar */
+
+    .mensaje {
+        max-width: 70%;
+        display: flex;
+        gap: 20px;
+
+        &.propio {
+            align-self: flex-end;
+
+            .texts {
+                p {
+                    background-color: #5183fe;
+                }
+            }
+        }
+
+        img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .texts {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+
+            img {
+                height: 300px;
+                width: 500px;
+                object-fit: cover;
+            }
+
+            p {
+                padding: 20px;
+                background-color: #51fe76;
+                color: black;
+            }
+
+            span {
+                font-size: smaller;
+            }
+        }
+    }
+}
+
+
+.chat .bottom {
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid greenyellow;
+    gap: 25px;
+
+    img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    input {
+        flex: 1;
+        background-color: rgb(110, 245, 255);
+        border: none;
+        outline: none;
+        color: black;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: medium;
+    }
+
+    .emoticonos {
+        position: relative;
+
+        .selector {
+            position: absolute;
+            bottom: 66px;
+        }
+    }
+
+    .enviarBoton {
+        background-color: #5183fe;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}
+
+.chat .center .mensaje .texts p {
+    padding: 20px;
+    background-color: #51fe76;
+    color: black;
+    max-width: 100%; /* Establecer la anchura máxima del texto */
+    word-wrap: break-word; /* Romper palabras largas */
+    overflow-wrap: break-word; /* Para navegadores que no soportan 'word-wrap' */
+    word-break: break-all; /* Forzar ruptura de palabras */
+    text-overflow: ellipsis; /* Mostrar puntos suspensivos (...) si el texto es demasiado largo */
+}

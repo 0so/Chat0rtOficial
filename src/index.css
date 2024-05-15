@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: #0f001d;
+  /* background-image: url("/fondo.png"); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: rgb(0, 0, 0);
+}
+
+button {
+  background-color: #6f00ff;
+  color: #fff;
+  padding: 10px;
+}
+
+.contenedor {
+  display: flex;
+  /* flex-direction: column; */
+  height: 100vh;
+  width: 100vw;
+}
+.contenedor2 {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+.cargando {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+
+/* Estilos para el componente Toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+nav {
+  background-color: #0f001d; 
+  padding: 10px 0px; 
+  border-bottom: 1px solid #6f00ff;
+}
+
+.nav-links li {
+  margin-left: 10px; 
+}
+
+
+  
+
+
+
+

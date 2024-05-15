@@ -1,0 +1,130 @@
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../lib/firebase";
+import getPublicIP from "../../util/util";
+import { doc, setDoc } from "firebase/firestore";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import "./registro.css";
+
+const Registro = () => {
+  const [cargando, setCargando] = useState(false);
+  const [pagando, setPagando] = useState(false);
+  const [formData, setFormData] = useState(null); // Estado para almacenar los datos del formulario
+
+  const manejoRegistro = async (e) => {
+    e.preventDefault();
+    setCargando(true);
+
+    const formData = new FormData(e.target);
+    setFormData(formData); // Guardar los datos del formulario en el estado
+
+    const username = formData.get("username");
+
+
+    try {
+      // Validar el nombre de usuario
+      if (!username.trim()) {
+        toast.error("El nombre de usuario no puede estar vacío");
+        return;
+      }
+      if (username.length > 15) {
+        toast.error("El nombre de usuario no puede tener más de 15 caracteres");
+        return;
+      }
+      if (/\s/.test(username)) {
+        toast.error("El nombre de usuario no puede contener espacios");
+        return;
+      }
+
+      // Realizar el pago con PayPal
+      setPagando(true);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const handlePaymentComplete = async (details, data) => {
+    // Crear la cuenta de usuario usando los datos del formulario guardados en el estado
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const ipUsuario = await getPublicIP();
+
+      // Actualizar la información del usuario en Firestore
+      await setDoc(doc(db, "usuarios", res.user.uid), {
+        usuario: username,
+        email: email,
+        id: res.user.uid,
+        ip: ipUsuario
+      });
+
+      // Crear una colección para los chats del usuario
+      await setDoc(doc(db, "chatusuarios", res.user.uid), {
+        chats: []
+      });
+
+      // Mostrar mensaje de éxito
+      toast.success("CUENTA CREADA EXITOSAMENTE");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    } finally {
+      setCargando(false);
+      setPagando(false); // Establecer pagando de nuevo a falso después de completar el pago
+    }
+  };
+
+  const handlePaymentError = () => {
+    toast.error("Pago no completado");
+    setPagando(false);
+  };
+
+  return (
+    <PayPalScriptProvider options={{ "client-id": "AbnGDSOMev0it_KO9a7fgfFRC57vH4kbl4qXANEAjm2-b1HwUWgqQ82hOWHFwVOAyiUsZq4sKHB-oN62" }}>
+      <div className="registro">
+        <div className="item">
+          <h2>Crear Una Cuenta</h2>
+          <form onSubmit={manejoRegistro}>
+            <input type="text" placeholder="Username" name="username" />
+            <input type="text" placeholder="Email" name="email" />
+            <input type="password" placeholder="Password" name="password" />
+            <button disabled={cargando}>{cargando ? "CARGANDO" : "REGISTRARSE"}</button>
+          </form>
+          {pagando && (
+            <PayPalButtons
+              style={{ layout: "horizontal" }}
+              createOrder={(data, actions) => {
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      amount: {
+                        value: "0.01" 
+                      },
+                      custom_id: "user_registration",
+                      custom_fields: {
+                        username: formData.get("username"),
+                        email: formData.get("email"),
+                        password: formData.get("password")
+                      }
+                    }
+                  ]
+                });
+              }}
+              onApprove={handlePaymentComplete}
+              onError={handlePaymentError}
+            />
+          )}
+        </div>
+      </div>
+    </PayPalScriptProvider>
+  );
+};
+
+export default Registro;

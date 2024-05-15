@@ -1,0 +1,48 @@
+/* admin-panel.css */
+
+body{
+    background-color: white; /* Añade un fondo blanco para anular el fondo azul */
+}
+
+.admin{
+    background-color: white;
+}
+
+.admin-panel-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white; /* Añade un fondo blanco para anular el fondo azul */
+  }
+  
+  .admin-panel-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .admin-panel-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-panel-table th,
+  .admin-panel-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .admin-panel-table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .admin-panel-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .admin-panel-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  
