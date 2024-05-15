@@ -77,7 +77,13 @@ export const AddUser = () => {
                 await updateDoc(userDoc, {
                     usuariosAgregados: arrayUnion(usuario.id)
                 });
-
+    
+                // Actualizar la lista de usuarios agregados en el documento del usuario añadido
+                const addedUserDoc = doc(db, "usuarios", usuario.id);
+                await updateDoc(addedUserDoc, {
+                    usuariosAgregados: arrayUnion(usuarioActual.id)
+                });
+    
                 console.log("Usuario añadido:", usuario);
             } else {
                 console.log("No se encontró el documento del usuario actual");
