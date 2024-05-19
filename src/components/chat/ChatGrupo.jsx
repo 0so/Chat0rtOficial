@@ -10,7 +10,7 @@ import {
     getDoc
 } from "firebase/firestore";
 import "./chatgrupal.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ChatGrupal = () => {
     const [mensaje, setMensaje] = useState("");
@@ -20,11 +20,6 @@ const ChatGrupal = () => {
 
     const ultimoMensajeRef = useRef(null);
 
-    useEffect(() => {
-        if (mensajes.length > 0) {
-            setMensaje("");
-        }
-    }, [mensajes]);
 
     useEffect(() => {
         const unsubscribe = onSnapshot(
@@ -66,6 +61,9 @@ const ChatGrupal = () => {
                 timestamp: new Date(),
             });
 
+            
+        setMensaje("");
+
         } catch (error) {
             console.error("Error al enviar mensaje:", error);
         }
@@ -92,6 +90,7 @@ const ChatGrupal = () => {
                     placeholder="Escribe tu mensaje..."
                 />
                 <button type="submit">Enviar</button>
+                <Link to="/" className="volver">Volver</Link> 
             </form>
         </div>
     );
