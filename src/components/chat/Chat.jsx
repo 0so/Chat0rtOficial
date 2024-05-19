@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
-import { db, storage } from "../../lib/firebase"; // Asegúrate de importar storage
+import { db, storage } from "../../lib/firebase"; 
 import { useStoreChat } from "../../lib/storeChat";
 import { useStoreUsuario } from "../../lib/storeUsuario";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Importar funciones de almacenamiento
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 
 const Chat = () => {
     const [abrir, setAbrir] = useState(false);
     const [text, setText] = useState("");
     const [image, setImage] = useState(null);
-    const imageInputRef = useRef(null); // Añadido: referencia al input de archivo
+    const imageInputRef = useRef(null); 
     const { idChat, usuario } = useStoreChat();
     const { usuarioActual } = useStoreUsuario();
 
@@ -94,7 +94,14 @@ const Chat = () => {
             console.log(error);
         }
     };
-
+    
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            enviar();
+        }
+    };
+    
     return (
         <div className='chat'>
             <div className="top">
@@ -121,6 +128,7 @@ const Chat = () => {
                     type="text"
                     placeholder="Escribe un mensaje..."
                     onChange={e => setText(e.target.value)}
+                    onKeyDown={handleKeyDown} 
                     value={text}
                     maxLength={MAX_CARACTERES}
                 />
