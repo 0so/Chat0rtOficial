@@ -84,36 +84,13 @@ const Chat = () => {
         <div className='chat'>
             <div className="top">
                 <div className="user">
-                    <img src="./perfil.png" alt="" />
+                    {/* <img src="./perfil.png" alt="" /> */} 
                     <div className="texts">
                         <span>{usuario.usuario}</span>
-                        <p>Hola buenos dias como estas que tal todo</p>
                     </div>
                 </div>
             </div>
             <div className="center">
-                {/* <div className="mensaje">
-                    <img src="./perfil.png" alt="" />
-                    <div className="texts">
-                        <img src="https://imgs.search.brave.com/M9XWpxVOJa7Gq5kRYfK149_GRYarbeel6W-bsBuHkHc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy8w/LzA0L0xhX2NhYmEl/QzMlQjFhX2RlX0Fs/cGluYS5qcGc" alt=""></img>
-                        <p>Mensaje 1 de prueba a ver como funciona todo esto espero que bin</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="mensaje propio">
-                    <img src="./perfil.png" alt="" />
-                    <div className="texts">
-                        <p>Mensaje 1 de prueba a ver como funciona todo esto espero que bin</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="mensaje">
-                    <img src="./perfil.png" alt="" />
-                    <div className="texts">
-                        <p>Mensaje 1 de prueba a ver como funciona todo esto espero que bin</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div> */}
                 {chat?.mensajes?.map(mensaje => (
                     <div className={mensaje.emisorId === usuarioActual?.id ? "mensaje propio" : "mensaje"} key={mensaje?.creadoA}>
                         {/* <img src="./perfil.png" alt="" /> */}

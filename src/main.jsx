@@ -16,14 +16,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import AdminPanel from '../src/components/4dm1n/AdminPanel.jsx';
 import './index.css';
+import ChatGrupal from "../src/components/chat/ChatGrupo.jsx";
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes> {/* Utiliza Routes en lugar de Route */}
-        <Route path="/" element={<App />} /> {/* Utiliza 'element' para definir el componente */}
-        <Route path="/admin" element={<AdminPanel />} /> {/* Utiliza 'element' para definir el componente */}
-      </Routes> {/* Cierra Routes */}
+      <Routes> 
+        <Route path="/" element={<App />} /> 
+        <Route path="/admin" element={<AdminPanel />} /> 
+        <Route path="/chat-grupal/:userId" element={<ChatGrupal />} /> 
+      </Routes> 
     </BrowserRouter>
   </React.StrictMode>
 );

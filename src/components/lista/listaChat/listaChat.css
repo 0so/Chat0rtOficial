@@ -7,7 +7,7 @@
     flex-direction: column;
     position: relative; /* scroll dentro del contenedor */
 
-    .añadir {
+    .añadir , .grupo{
         width: 60px;
         height: 60px;
         padding: 5px;

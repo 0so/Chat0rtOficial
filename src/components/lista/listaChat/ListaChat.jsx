@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useStoreUsuario } from "../../../lib/storeUsuario";
 import { db } from "../../../lib/firebase";
 import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
@@ -68,7 +69,6 @@ const ListaChat = () => {
         setSearchTerm(event.target.value);
     };
 
-    // Función para truncar el texto y agregar puntos suspensivos
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + "...";
@@ -76,17 +76,18 @@ const ListaChat = () => {
 
     return (
         <div className="listaChat">
-            {/* Botón de añadir */}
             <img
                 src={"añadir.png"}
                 alt=""
                 className="añadir"
                 onClick={() => setModoAdd((a) => !a)}
             />
-
-            {/* Lista de chats */}
+            
+            <Link to={`/chat-grupal/${usuarioActual.id}`} >
+                <img src={"grupo.png"} alt="" className="grupo" />
+            </Link>
             <div className="chatListContainer">
-                <inputit
+                <input
                     type="text"
                     placeholder="Buscar chats..."
                     value={searchTerm}
@@ -97,15 +98,14 @@ const ListaChat = () => {
                         style={{ backgroundColor: chat?.esEnviado ? "transparent" : "orange" }}>
                         <div className="texts">
                             <span>{chat.usuario.usuario}</span>
-                            <p>{truncateText(chat.ultimoMensaje, 30)}</p> {/* Limita el mensaje a 50 caracteres */}
+                            <p>{truncateText(chat.ultimoMensaje, 30)}</p>
                         </div>
                     </div>
                 ))}
             </div>
-
-            {/* Componente de añadir usuario */}
             {addModo && <AddUser />}
         </div>
     );
 };
+
 export default ListaChat;
