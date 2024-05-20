@@ -5,35 +5,38 @@ import { auth, db } from "../../lib/firebase";
 import getPublicIP from "../../util/util";
 import { doc, setDoc } from "firebase/firestore";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import emailjs from "emailjs-com";
 import "./registro.css";
 
 const Registro = () => {
   const [cargando, setCargando] = useState(false);
   const [pagando, setPagando] = useState(false);
-  const [formData, setFormData] = useState(null); // Estado para almacenar los datos del formulario
+  const [formData, setFormData] = useState(null);
 
   const manejoRegistro = async (e) => {
     e.preventDefault();
     setCargando(true);
 
     const formData = new FormData(e.target);
-    setFormData(formData); // Guardar los datos del formulario en el estado
+    setFormData(formData);
 
     const username = formData.get("username");
-
 
     try {
       // Validar el nombre de usuario
       if (!username.trim()) {
         toast.error("El nombre de usuario no puede estar vacío");
+        setCargando(false);
         return;
       }
       if (username.length > 15) {
         toast.error("El nombre de usuario no puede tener más de 15 caracteres");
+        setCargando(false);
         return;
       }
       if (/\s/.test(username)) {
         toast.error("El nombre de usuario no puede contener espacios");
+        setCargando(false);
         return;
       }
 
@@ -42,13 +45,11 @@ const Registro = () => {
     } catch (err) {
       console.log(err);
       toast.error(err.message);
-    } finally {
       setCargando(false);
     }
   };
 
   const handlePaymentComplete = async (details, data) => {
-    // Crear la cuenta de usuario usando los datos del formulario guardados en el estado
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
@@ -70,14 +71,33 @@ const Registro = () => {
         chats: []
       });
 
-      // Mostrar mensaje de éxito
-      toast.success("CUENTA CREADA EXITOSAMENTE");
+      // Enviar correo 
+      const emailParams = {
+        from_name: "0RT TEAM!",
+        to_name: username,
+        to_email: email,
+        message: "Gracias por registrarse en nuestro Chat Web. Cualquier pregunta, contáctenos a este correo."
+      };
+
+      emailjs.send(
+        import.meta.env.VITE_EMAILJS_API_KEY_SERVICE,
+        import.meta.env.VITE_EMAILJS_API_KEY_TEMPLATE,
+        emailParams,
+        import.meta.env.VITE_EMAILJS_API_KEY_USERID
+      )
+      .then(() => {
+        toast.success("CUENTA CREADA EXITOSAMENTE!!!");
+      })
+      .catch((error) => {
+        console.error("Error sending email", error);
+      });
+
     } catch (err) {
       console.log(err);
       toast.error(err.message);
     } finally {
       setCargando(false);
-      setPagando(false); // Establecer pagando de nuevo a falso después de completar el pago
+      setPagando(false);
     }
   };
 
@@ -105,7 +125,7 @@ const Registro = () => {
                   purchase_units: [
                     {
                       amount: {
-                        value: "0.01" 
+                        value: "0.01"
                       },
                       custom_id: "user_registration",
                       custom_fields: {
