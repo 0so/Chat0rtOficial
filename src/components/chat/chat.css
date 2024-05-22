@@ -1,20 +1,30 @@
 .chat {
     flex: 2;
-    border-top: 5px solid black;
     display: flex;
     flex-direction: column;
    /* margin-top: 87px;  Ajusta el valor según sea necesario */
-    background-image: url("fondo.png");
+    /* background-image: url("fondo.png"); */
+ 
+    background: linear-gradient(159deg, #000000, #00264d, #000027);
 
 
 }
 
 .chat .top {
-    padding: 8px;
+    padding: 32x;  /* Reduce el padding para mover la línea superior hacia arriba */
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid greenyellow;
+    background: linear-gradient(45deg, #000000, #2277004f, #000027);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    margin-top: -33px;  /* Ajusta el margen superior para mover todo el bloque hacia arriba */
+}
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .chat .user {
@@ -22,6 +32,8 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-left: 30px;
+    margin-top: 10px;
 
     img {
         width: 60px;

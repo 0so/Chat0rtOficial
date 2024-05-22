@@ -25,6 +25,8 @@ const Chat = () => {
     });
 
     const [chat, setChat] = useState();
+    const [perfilUrl, setPerfilUrl] = useState("");
+
     useEffect(() => {
         if (idChat) {
             const unSub = onSnapshot(doc(db, "chats", idChat), (res) => {
@@ -36,6 +38,21 @@ const Chat = () => {
             };
         }
     }, [idChat]);
+
+    useEffect(() => {
+        const fetchPerfilUrl = async () => {
+            const usuarioDocRef = doc(db, "usuarios", usuario.id);
+            const usuarioDocSnap = await getDoc(usuarioDocRef);
+            if (usuarioDocSnap.exists()) {
+                const usuarioData = usuarioDocSnap.data();
+                if (usuarioData.perfilUrl) {
+                    setPerfilUrl(usuarioData.perfilUrl);
+                }
+            }
+        };
+
+        fetchPerfilUrl();
+    }, [usuario.id]);
 
     const handleImageChange = (e) => {
         if (e.target.files[0]) {
@@ -106,7 +123,7 @@ const Chat = () => {
         <div className='chat'>
             <div className="top">
                 <div className="user">
-                    {/* <img src="./perfil.png" alt="" /> */} 
+                    <img src={perfilUrl || "./perfil.png"} alt="Perfil" className="perfil-img" />
                     <div className="texts">
                         <span>{usuario.usuario}</span>
                     </div>

@@ -7,22 +7,22 @@
     flex-direction: column;
     position: relative; /* scroll dentro del contenedor */
 
-    .añadir , .grupo{
+    .añadir, .grupo {
         width: 60px;
         height: 60px;
         padding: 5px;
         cursor: pointer;
         border-radius: 5px;
-        
     }
+
     input[type="text"] {
         width: 100%;
         padding: 10px; 
         margin-bottom: 20px; 
         border: none;
         border-radius: 5px;
-        background-color: white;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* sombra */
+        background-color: rgb(187, 255, 255);
+        box-shadow: 0 0 5px rgb(0, 55, 117); /* sombra */
     }
 
     .item {
@@ -32,29 +32,39 @@
         padding: 20px;
         cursor: pointer;
         border-bottom: 1px solid black;
+    }
 
-        .texts {
-            color: blue;
+    .texts {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        color: rgb(255, 255, 255);
+        background-color: #141414;
+        border-radius: 15px;
+        width: 100%;
+        box-shadow: 0 0 10px rgb(81, 255, 0);
+        padding: 20px;
+
+        .perfil-img {
+            width: 70px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .info {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding: 10px; 
-            background-color: #f3f3f3;
-            border-radius: 15px;
-            width: 100%; 
-            height: 100%; 
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        span {
-            font-weight: 500;
-        }
-
-        p {
-            font-size: 14px;
-            font-weight: 300;
+            width: 100%;
         }
     }
 
+    span {
+        font-weight: 500;
+    }
 
-
+    p {
+        font-size: 14px;
+        font-weight: 300;
+    }
 }

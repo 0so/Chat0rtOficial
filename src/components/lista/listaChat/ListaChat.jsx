@@ -30,9 +30,9 @@ const ListaChat = () => {
             const dataChat = await Promise.all(promises);
             setChats(dataChat.sort((a, b) => b.actualizadoA - a.actualizadoA));
             // Si el chat seleccionado ha sido eliminado, actualizar el estado global
-        if (!dataChat.find(chat => chat.idChat === idChat)) {
-            cambiarChat(null, null);
-        }
+            if (!dataChat.find(chat => chat.idChat === idChat)) {
+                cambiarChat(null, null);
+            }
         });
 
         return () => {
@@ -80,60 +80,60 @@ const ListaChat = () => {
 
 
     const handleDelete = async (chat) => {
-    const usuarioChatsRef = doc(db, "chatusuarios", usuarioActual.id);
-    const receptorChatsRef = doc(db, "chatusuarios", chat.idReceptor);
-    const chatDocRef = doc(db, "chats", chat.idChat);
+        const usuarioChatsRef = doc(db, "chatusuarios", usuarioActual.id);
+        const receptorChatsRef = doc(db, "chatusuarios", chat.idReceptor);
+        const chatDocRef = doc(db, "chats", chat.idChat);
 
-    try {
-        // Eliminar chat de la cole "chats"
-        await deleteDoc(chatDocRef);
+        try {
+            // Eliminar chat de la cole "chats"
+            await deleteDoc(chatDocRef);
 
-        // Actualizar la lista de chats del usuario actual
-        const usuarioChats = chats.filter(item => item.idChat !== chat.idChat);
-        await updateDoc(usuarioChatsRef, {
-            chats: usuarioChats.map(({ usuario, ...rest }) => rest),
-        });
-
-        // Actualizar la lista de chats del receptor
-        const receptorChatsSnap = await getDoc(receptorChatsRef);
-        if (receptorChatsSnap.exists()) {
-            const receptorChats = receptorChatsSnap.data().chats.filter(item => item.idChat !== chat.idChat);
-            await updateDoc(receptorChatsRef, {
-                chats: receptorChats,
-            });
-        }
-
-        // Eliminar ambos usuarios de los agregados del otro usuario
-        const usuarioActualRef = doc(db, "usuarios", usuarioActual.id);
-        const receptorRef = doc(db, "usuarios", chat.idReceptor);
-
-        const usuarioActualSnap = await getDoc(usuarioActualRef);
-        const receptorSnap = await getDoc(receptorRef);
-
-        if (usuarioActualSnap.exists() && receptorSnap.exists()) {
-            const usuarioActualData = usuarioActualSnap.data();
-            const receptorData = receptorSnap.data();
-
-            const updatedUsuariosAgregadosActual = usuarioActualData.usuariosAgregados.filter(id => id !== chat.idReceptor);
-            const updatedUsuariosAgregadosReceptor = receptorData.usuariosAgregados.filter(id => id !== usuarioActual.id);
-
-            await updateDoc(usuarioActualRef, {
-                usuariosAgregados: updatedUsuariosAgregadosActual,
+            // Actualizar la lista de chats del usuario actual
+            const usuarioChats = chats.filter(item => item.idChat !== chat.idChat);
+            await updateDoc(usuarioChatsRef, {
+                chats: usuarioChats.map(({ usuario, ...rest }) => rest),
             });
 
-            await updateDoc(receptorRef, {
-                usuariosAgregados: updatedUsuariosAgregadosReceptor,
-            });
-        }
+            // Actualizar la lista de chats del receptor
+            const receptorChatsSnap = await getDoc(receptorChatsRef);
+            if (receptorChatsSnap.exists()) {
+                const receptorChats = receptorChatsSnap.data().chats.filter(item => item.idChat !== chat.idChat);
+                await updateDoc(receptorChatsRef, {
+                    chats: receptorChats,
+                });
+            }
+
+            // Eliminar ambos usuarios de los agregados del otro usuario
+            const usuarioActualRef = doc(db, "usuarios", usuarioActual.id);
+            const receptorRef = doc(db, "usuarios", chat.idReceptor);
+
+            const usuarioActualSnap = await getDoc(usuarioActualRef);
+            const receptorSnap = await getDoc(receptorRef);
+
+            if (usuarioActualSnap.exists() && receptorSnap.exists()) {
+                const usuarioActualData = usuarioActualSnap.data();
+                const receptorData = receptorSnap.data();
+
+                const updatedUsuariosAgregadosActual = usuarioActualData.usuariosAgregados.filter(id => id !== chat.idReceptor);
+                const updatedUsuariosAgregadosReceptor = receptorData.usuariosAgregados.filter(id => id !== usuarioActual.id);
+
+                await updateDoc(usuarioActualRef, {
+                    usuariosAgregados: updatedUsuariosAgregadosActual,
+                });
+
+                await updateDoc(receptorRef, {
+                    usuariosAgregados: updatedUsuariosAgregadosReceptor,
+                });
+            }
 
             // Actu  estado local
             cambiarChat(null, null);
             setChats(usuarioChats);
 
-    } catch (error) {
-        console.log("Error al eliminar el chat:", error);
-    }
-};
+        } catch (error) {
+            console.log("Error al eliminar el chat:", error);
+        }
+    };
 
     return (
         <div className="listaChat">
@@ -158,8 +158,15 @@ const ListaChat = () => {
                     <div className="item" key={chat.idChat} onClick={() => handleSelect(chat)}
                         style={{ backgroundColor: chat?.esEnviado ? "transparent" : "orange" }}>
                         <div className="texts">
-                            <span>{chat.usuario.usuario}</span>
-                            <p>{truncateText(chat.ultimoMensaje, 30)}</p>
+                            <img
+                                src={chat.usuario.perfilUrl || "perfil.png"}
+                                alt="Perfil"
+                                className="perfil-img"
+                            />
+                            <div className="info">
+                                <span>{chat.usuario.usuario}</span>
+                                <p>{truncateText(chat.ultimoMensaje, 30)}</p>
+                            </div>
                             <button className="deleteButton" onClick={() => handleDelete(chat)}>Eliminar</button>
                         </div>
                     </div>

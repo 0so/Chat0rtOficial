@@ -101,7 +101,7 @@ export const AddUser = () => {
                     <li key={usuario.id}>
                         <div className="user">
                             <div className="estado">
-                                {/* <img src="./perfil.png" alt=""></img> */}
+
                                 <span>{usuario.data.usuario}</span>
                             </div>
                             <button onClick={() => anadirUser(usuario)}>Añadir Usuario</button>
