@@ -20,7 +20,6 @@ const ChatGrupal = () => {
 
     const ultimoMensajeRef = useRef(null);
 
-
     useEffect(() => {
         const unsubscribe = onSnapshot(
             query(collection(db, "mensajes"), orderBy("timestamp", "asc")),
@@ -48,7 +47,6 @@ const ChatGrupal = () => {
         if (mensaje.trim() === "") return;
 
         try {
-            // Consulta el documento de usuario en la colección "usuarios"
             const usuarioDoc = await getDoc(doc(db, "usuarios", userId));
             let nombreUsuario = "Usuario desconocido";
             if (usuarioDoc.exists()) {
@@ -61,8 +59,7 @@ const ChatGrupal = () => {
                 timestamp: new Date(),
             });
 
-            
-        setMensaje("");
+            setMensaje("");
 
         } catch (error) {
             console.error("Error al enviar mensaje:", error);
@@ -90,7 +87,7 @@ const ChatGrupal = () => {
                     placeholder="Escribe tu mensaje..."
                 />
                 <button type="submit">Enviar</button>
-                <Link to="/" className="volver">Volver</Link> 
+                <Link to="/" className="volver">Volver</Link>
             </form>
         </div>
     );

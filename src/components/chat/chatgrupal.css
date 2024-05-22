@@ -1,23 +1,30 @@
 .chatGrupal {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    background-image: url("../../../public/grupofondo.jpg");
-    /* background-color: rgb(255, 135, 135); */
-    background-size: cover; 
-    height: 100vh; 
-    width: 20vw; 
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: linear-gradient(-22deg, #000000, #19001b, #000806, #0b1222);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
     scrollbar-color: green transparent; 
-
 }
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .chatGrupal h1 {
-    color: rgb(255, 255, 255);
+    color: rgb(222, 255, 73);
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .mensajesContainer {
-    padding:30px;
+    flex: 1;
+    padding: 20px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -25,38 +32,56 @@
 
 .mensaje {
     margin-bottom: 20px;
-   
 }
 
 .usuario {
     font-weight: bold;
-
     color: white;
 }
 
 .contenido {
     padding: 10px;
-    color: rgb(149, 255, 172);
-    max-width: 100%; 
+    color: rgb(94, 255, 129);
+    max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-all;
     text-overflow: ellipsis;
-
 }
 
 .inputMensaje {
-    width: 96%;
-    padding: 10px; 
-    box-sizing: border-box; 
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-.volver{
+form {
+    display: flex;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+form input {
+    flex: 1;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #6f00ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.volver {
     background-color: #6f00ff;
     color: #fff;
     padding: 10px;
-    position: relative;
-    margin-left: 244px;
-    
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 10px;
 }
-
