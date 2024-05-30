@@ -9,6 +9,7 @@ import { auth } from "./lib/firebase"
 import { useStoreUsuario } from "./lib/storeUsuario"
 import { useStoreChat } from "./lib/storeChat"
 import Registro from "./components/registro/Registro";
+import Reloj from "./components/reloj/Reloj";
 
 
 
@@ -50,13 +51,16 @@ const App = () => {
         ) : (
           <div className="contenedor2">
             <nav>
-              <ul className="nav-links">
-                <li>
-                  <button onClick={() => setMostrarLogin(!mostrarLogin)}>
-                    {mostrarLogin ? "Volver al Registro" : "Iniciar Sesión"}
-                  </button>
-                </li>
-              </ul>
+              <div className="nav-container">
+                <ul className="nav-links">
+                  <li>
+                    <button onClick={() => setMostrarLogin(!mostrarLogin)}>
+                      {mostrarLogin ? "Volver al Registro" : "Iniciar Sesión"}
+                    </button>
+                  </li>
+                </ul>
+                <Reloj />
+              </div>
             </nav>
             {mostrarLogin ? ( // Mostrar el componente de inicio de sesión si mostrarLogin es true
               <Login />

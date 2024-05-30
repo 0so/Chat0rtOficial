@@ -58,9 +58,9 @@ nav {
   margin-left: 10px; 
 }
 
-
-  
-
-
-
-
+.nav-container {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between; 
+  width: 99%; 
+}
