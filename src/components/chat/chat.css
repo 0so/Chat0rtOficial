@@ -2,16 +2,17 @@
     flex: 2;
     display: flex;
     flex-direction: column;
-   /* margin-top: 87px;  Ajusta el valor según sea necesario */
+    /* margin-top: 87px;  Ajusta el valor según sea necesario */
     /* background-image: url("fondo.png"); */
- 
+
     background: linear-gradient(159deg, #000000, #00264d, #000027);
 
 
 }
 
 .chat .top {
-    padding: 32x;  /* Reduce el padding para mover la línea superior hacia arriba */
+    padding: 32x;
+    /* Reduce el padding para mover la línea superior hacia arriba */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -19,12 +20,22 @@
     background: linear-gradient(45deg, #000000, #2277004f, #000027);
     background-size: 400% 400%;
     animation: gradientAnimation 15s ease infinite;
-    margin-top: -33px;  /* Ajusta el margen superior para mover todo el bloque hacia arriba */
+    margin-top: -33px;
+    /* Ajusta el margen superior para mover todo el bloque hacia arriba */
 }
+
 @keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .chat .user {
@@ -35,7 +46,7 @@
     margin-left: 30px;
     margin-top: 10px;
 
-    img {
+    img[alt="Perfil"] {
         width: 65px;
         height: 65px;
         border-radius: 50%;
@@ -57,18 +68,36 @@
             font-weight: bold;
             color: yellow;
         }
+
+        img {
+            width: 60px;
+            height: 10px;
+        }
     }
+}
+
+.status.online .rojo {
+    color: greenyellow;
+}
+
+
+.status.offline .verde {
+    color: red;
+    font-weight: bold;
 }
 
 .chat .center {
     padding: 20px;
     flex: 1;
-    overflow-y: scroll; /* Hacer que el contenedor sea desplazable verticalmente */
+    overflow-y: scroll;
+    /* Hacer que el contenedor sea desplazable verticalmente */
     display: flex;
     flex-direction: column;
     gap: 20px;
-    scrollbar-width: thin; /* Para Firefox */
-    scrollbar-color: #888 transparent; /* Color del scrollbar */
+    scrollbar-width: thin;
+    /* Para Firefox */
+    scrollbar-color: #888 transparent;
+    /* Color del scrollbar */
 
     .mensaje {
         max-width: 70%;
@@ -164,9 +193,14 @@
     padding: 20px;
     background-color: #51fe76;
     color: black;
-    max-width: 100%; /* Establecer la anchura máxima del texto */
-    word-wrap: break-word; /* Romper palabras largas */
-    overflow-wrap: break-word; /* Para navegadores que no soportan 'word-wrap' */
-    word-break: break-all; /* Forzar ruptura de palabras */
-    text-overflow: ellipsis; /* Mostrar puntos suspensivos (...) si el texto es demasiado largo */
+    max-width: 100%;
+    /* Establecer la anchura máxima del texto */
+    word-wrap: break-word;
+    /* Romper palabras largas */
+    overflow-wrap: break-word;
+    /* Para navegadores que no soportan 'word-wrap' */
+    word-break: break-all;
+    /* Forzar ruptura de palabras */
+    text-overflow: ellipsis;
+    /* Mostrar puntos suspensivos (...) si el texto es demasiado largo */
 }

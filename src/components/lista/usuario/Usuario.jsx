@@ -22,6 +22,24 @@ const Usuario = () => {
         };
 
         fetchPerfilUrl();
+
+        // Manejar el evento beforeunload para actualizar el estado en línea antes de cerrar la página o el navegador
+        const handleBeforeUnload = async () => {
+            try {
+                // Actualiza el estado en línea a false
+                await updateDoc(doc(db, "usuarios", usuarioActual.id), {
+                    enLinea: false
+                });
+            } catch (error) {
+                console.error("Error al actualizar el estado en línea antes de cerrar la página: ", error);
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, [usuarioActual.id]);
 
     const handleImageUpload = async (e) => {
@@ -36,6 +54,19 @@ const Usuario = () => {
         await updateDoc(usuarioDocRef, { perfilUrl: downloadUrl });
 
         setPerfilUrl(downloadUrl);
+    };
+
+    const handleLogout = async () => {
+        try {
+            // Actualiza el estado en línea a false
+            await updateDoc(doc(db, "usuarios", usuarioActual.id), {
+                enLinea: false
+            });
+            // Cierra sesión
+            await auth.signOut();
+        } catch (error) {
+            console.error("Error al cerrar sesión: ", error);
+        }
     };
 
     return (
@@ -57,7 +88,7 @@ const Usuario = () => {
                 />
                 <h2>{usuarioActual.usuario}</h2>
             </div>
-            <button className="cerrarSesion" onClick={() => auth.signOut()}>Cerrar Sesión</button>
+            <button className="cerrarSesion" onClick={handleLogout}>Cerrar Sesión</button>
         </div>
     );
 };

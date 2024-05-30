@@ -3,7 +3,8 @@ import { useState } from "react";
 import "./login.css";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase"; // Asegúrate de importar db
+import { doc, updateDoc } from "firebase/firestore"; // Importa updateDoc
 
 const Login = () => {
   const [cargando, setCargando] = useState(false);
@@ -16,7 +17,13 @@ const Login = () => {
     const { email, password } = Object.fromEntries(formData);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Actualiza el estado en línea en Firestore
+      await updateDoc(doc(db, "usuarios", user.uid), {
+        enLinea: true
+      });
     } catch (err) {
       console.log(err);
       toast.error(err.message);
