@@ -22,24 +22,6 @@ const Usuario = () => {
         };
 
         fetchPerfilUrl();
-
-        // Manejar el evento beforeunload para actualizar el estado en línea antes de cerrar la página o el navegador
-        const handleBeforeUnload = async () => {
-            try {
-                // Actualiza el estado en línea a false
-                await updateDoc(doc(db, "usuarios", usuarioActual.id), {
-                    enLinea: false
-                });
-            } catch (error) {
-                console.error("Error al actualizar el estado en línea antes de cerrar la página: ", error);
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
     }, [usuarioActual.id]);
 
     const handleImageUpload = async (e) => {
@@ -58,7 +40,7 @@ const Usuario = () => {
 
     const handleLogout = async () => {
         try {
-            // Actualiza el estado en línea a false
+            // Actualiza el estado enLinea a false
             await updateDoc(doc(db, "usuarios", usuarioActual.id), {
                 enLinea: false
             });
