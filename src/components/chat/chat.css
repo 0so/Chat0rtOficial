@@ -204,3 +204,13 @@
     text-overflow: ellipsis;
     /* Mostrar puntos suspensivos (...) si el texto es demasiado largo */
 }
+
+.no-chat-selected {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    color: white; 
+    font-size: 33px;
+}

@@ -46,7 +46,7 @@ const App = () => {
         {usuarioActual ? (
           <>
             <Lista />
-            {idChat && <Chat />}
+            <Chat />
           </>
         ) : (
           <div className="contenedor2">

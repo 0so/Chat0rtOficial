@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
-import { db, storage, auth } from "../../lib/firebase";
+import { db, storage } from "../../lib/firebase";
 import { useStoreChat } from "../../lib/storeChat";
 import { useStoreUsuario } from "../../lib/storeUsuario";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -17,7 +17,7 @@ const Chat = () => {
   const { usuarioActual } = useStoreUsuario();
   const [perfilUrl, setPerfilUrl] = useState("");
   const [enLinea, setEnLinea] = useState(false);
-  const [usuarioEnLinea, setUsuarioEnLinea] = useState(false); // Estado del otro usuario
+  const [usuarioEnLinea, setUsuarioEnLinea] = useState(false);
   const [chat, setChat] = useState();
   const ultimoChat = useRef(null);
 
@@ -41,6 +41,7 @@ const Chat = () => {
 
   useEffect(() => {
     const fetchPerfilUrl = async () => {
+      if (!usuario?.id) return;
       const usuarioDocRef = doc(db, "usuarios", usuario.id);
       const usuarioDocSnap = await getDoc(usuarioDocRef);
       if (usuarioDocSnap.exists()) {
@@ -53,9 +54,11 @@ const Chat = () => {
     };
 
     fetchPerfilUrl();
-  }, [usuario.id]);
+  }, [usuario?.id]);
 
   useEffect(() => {
+    if (!usuario?.id || !usuarioActual?.id) return;
+
     const usuarioDocRef = doc(db, "usuarios", usuario.id);
     const unsubscribe = onSnapshot(usuarioDocRef, (doc) => {
       if (doc.exists()) {
@@ -77,7 +80,7 @@ const Chat = () => {
       unsubscribe();
       unsubscribeUsuarioActual();
     };
-  }, [usuario.id, usuarioActual.id]);
+  }, [usuario?.id, usuarioActual?.id]);
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
@@ -146,61 +149,69 @@ const Chat = () => {
 
   return (
     <div className='chat'>
-      <div className="top">
-        <div className="user">
-          <img src={perfilUrl || "./perfil.png"} alt="Perfil" className="perfil-img" />
-          <div className="texts">
-            <span>{usuario.usuario}</span>
-            <span className={`status ${usuarioEnLinea ? "online" : "offline"}`}>
-              {usuarioEnLinea ?
-                <div className="rojo">
-                  <img src="./online.png" alt="Online" />
-                  <span>  ONLINE</span>
-                </div>
-                :
-                <div className="verde">
-                  <img src="./offline.png" alt="Offline" />
-                  <span>  OFFLINE</span>
-                </div>}
-            </span>
-          </div>
+      {!idChat ? (
+        <div className="no-chat-selected">
+          <p>¡Pulse un chat para hablar!</p>
         </div>
-      </div>
-      <div className="center">
-        {chat?.mensajes?.map(mensaje => (
-          <div className={mensaje.emisorId === usuarioActual?.id ? "mensaje propio" : "mensaje"} key={mensaje?.creadoA}>
-            <div className="texts">
-              {mensaje.imageUrl && <img src={mensaje.imageUrl} alt="Imagen" />}
-              <p>{mensaje.text}</p>
+      ) : (
+        <>
+          <div className="top">
+            <div className="user">
+              <img src={perfilUrl || "./perfil.png"} alt="Perfil" className="perfil-img" />
+              <div className="texts">
+                <span>{usuario?.usuario}</span>
+                <span className={`status ${usuarioEnLinea ? "online" : "offline"}`}>
+                  {usuarioEnLinea ?
+                    <div className="rojo">
+                      <img src="./online.png" alt="Online" />
+                      <span>  ONLINE</span>
+                    </div>
+                    :
+                    <div className="verde">
+                      <img src="./offline.png" alt="Offline" />
+                      <span>  OFFLINE</span>
+                    </div>}
+                </span>
+              </div>
             </div>
           </div>
-        ))}
-        <div ref={ultimoChat}></div>
-      </div>
-      <div className="bottom">
-        <input
-          type="text"
-          placeholder="Escribe un mensaje..."
-          onChange={e => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          value={text}
-          maxLength={MAX_CARACTERES}
-        />
-        <span>{text.length}/{MAX_CARACTERES}</span>
-        <div className="emoticonos">
-          <img src="./emoticonos.png" alt="" onClick={() => setAbrir((a) => !a)} />
-          <div className="selector">
-            <EmojiPicker open={abrir} onEmojiClick={e => setText(text + e.emoji)} />
+          <div className="center">
+            {chat?.mensajes?.map(mensaje => (
+              <div className={mensaje.emisorId === usuarioActual?.id ? "mensaje propio" : "mensaje"} key={mensaje?.creadoA}>
+                <div className="texts">
+                  {mensaje.imageUrl && <img src={mensaje.imageUrl} alt="Imagen" />}
+                  <p>{mensaje.text}</p>
+                </div>
+              </div>
+            ))}
+            <div ref={ultimoChat}></div>
           </div>
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          ref={imageInputRef}
-        />
-        <button className="enviarBoton" onClick={enviar}>Enviar</button>
-      </div>
+          <div className="bottom">
+            <input
+              type="text"
+              placeholder="Escribe un mensaje..."
+              onChange={e => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              value={text}
+              maxLength={MAX_CARACTERES}
+            />
+            <span>{text.length}/{MAX_CARACTERES}</span>
+            <div className="emoticonos">
+              <img src="./emoticonos.png" alt="" onClick={() => setAbrir((a) => !a)} />
+              <div className="selector">
+                <EmojiPicker open={abrir} onEmojiClick={e => setText(text + e.emoji)} />
+              </div>
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={imageInputRef}
+            />
+            <button className="enviarBoton" onClick={enviar}>Enviar</button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
