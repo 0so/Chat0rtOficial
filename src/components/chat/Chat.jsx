@@ -151,7 +151,7 @@ const Chat = () => {
     <div className='chat'>
       {!idChat ? (
         <div className="no-chat-selected">
-          <p>¡Pulse un chat para hablar!</p>
+          <p>¡Añada un usuario para empezar a chatear!</p>
         </div>
       ) : (
         <>

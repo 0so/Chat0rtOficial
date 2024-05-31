@@ -13,7 +13,7 @@ const ListaChat = () => {
     const [filteredChats, setFilteredChats] = useState([]);
     const [addModo, setModoAdd] = useState(false);
     const { usuarioActual } = useStoreUsuario();
-    const { cambiarChat } = useStoreChat();
+    const { cambiarChat, idChat } = useStoreChat();
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "chatusuarios", usuarioActual.id), async (res) => {
@@ -31,14 +31,18 @@ const ListaChat = () => {
             setChats(dataChat.sort((a, b) => b.actualizadoA - a.actualizadoA));
             // Si el chat seleccionado ha sido eliminado, actualizar el estado global
             if (!dataChat.find(chat => chat.idChat === idChat)) {
-                cambiarChat(null, null);
+                if (dataChat.length > 0) {
+                    cambiarChat(dataChat[0].idChat, dataChat[0].usuario);
+                } else {
+                    cambiarChat(null, null);
+                }
             }
         });
 
         return () => {
             unsub();
         };
-    }, [usuarioActual.id]);
+    }, [usuarioActual.id, cambiarChat, idChat]);
 
     useEffect(() => {
         const filtered = chats.filter(chat =>
@@ -65,7 +69,6 @@ const ListaChat = () => {
         } catch (error) {
             console.log(error);
         }
-        console.log("Chat seleccionado:", chat);
         cambiarChat(chat.idChat, chat.usuario);
     };
 
@@ -77,7 +80,6 @@ const ListaChat = () => {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + "...";
     };
-
 
     const handleDelete = async (chat) => {
         const usuarioChatsRef = doc(db, "chatusuarios", usuarioActual.id);
@@ -127,7 +129,11 @@ const ListaChat = () => {
             }
 
             // Actu  estado local
-            cambiarChat(null, null);
+            if (usuarioChats.length > 0) {
+                cambiarChat(usuarioChats[0].idChat, usuarioChats[0].usuario);
+            } else {
+                cambiarChat(null, null);
+            }
             setChats(usuarioChats);
 
         } catch (error) {
@@ -143,7 +149,6 @@ const ListaChat = () => {
                 className="añadir"
                 onClick={() => setModoAdd((a) => !a)}
             />
-            
             <Link to={`/chat-grupal/${usuarioActual.id}`} >
                 <img src={"grupo.png"} alt="" className="grupo" />
             </Link>
