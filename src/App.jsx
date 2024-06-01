@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Chat from "./components/chat/Chat"
-// import Detalle from "./components/detalle/Detalle"
 import Lista from "./components/lista/Lista"
 import Login from "./components/login/Login"
 import Toast from "./components/toastmsg/Toast"
@@ -11,21 +10,12 @@ import { useStoreChat } from "./lib/storeChat"
 import Registro from "./components/registro/Registro";
 import Reloj from "./components/reloj/Reloj";
 
-
-
 const App = () => {
-
-
-  //  const usuario = false
   const { usuarioActual, estaCargando, buscarInfoUser } = useStoreUsuario()
   const { idChat } = useStoreChat();
-  const [mostrarLogin, setMostrarLogin] = useState(false); // Estado para determinar qué componente mostrar
+  const [mostrarLogin, setMostrarLogin] = useState(false);
+  const [mostrarListaChat, setMostrarListaChat] = useState(true); 
 
-
-  // useEffect observa cambios en usuario. 
-  // Cuando el usuario cambia, se llama a buscarInfoUser con el UID del usuario actual. 
-  // La suscripción se cancela cuando el componente se desmonta o cuando buscarInfoUser cambia. 
-  // Finalmente, usuarioActual se imprime en la consola para mostrar el estado actual del usuario autenticado.
   useEffect(() => {
     const cancelarSuscripcion = onAuthStateChanged(auth, (usuario) => {
       buscarInfoUser(usuario?.uid)
@@ -36,8 +26,6 @@ const App = () => {
     };
   }, [buscarInfoUser]);
 
-  console.log(usuarioActual)
-
   if (estaCargando) return <div className="cargando">Cargando...!!!</div>
 
   return (
@@ -45,8 +33,8 @@ const App = () => {
       <div className="contenedor">
         {usuarioActual ? (
           <>
-            <Lista />
-            <Chat />
+            {mostrarListaChat && <Lista />} 
+            <Chat onToggleLista={() => setMostrarListaChat(!mostrarListaChat)} /> 
           </>
         ) : (
           <div className="contenedor2">
@@ -62,7 +50,7 @@ const App = () => {
                 <Reloj />
               </div>
             </nav>
-            {mostrarLogin ? ( // Mostrar el componente de inicio de sesión si mostrarLogin es true
+            {mostrarLogin ? (
               <Login />
             ) : (
               <Registro />
@@ -73,8 +61,6 @@ const App = () => {
       <Toast />
     </>
   );
-
-
 }
 
 export default App

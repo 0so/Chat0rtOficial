@@ -8,7 +8,7 @@ import { useStoreChat } from "../../lib/storeChat";
 import { useStoreUsuario } from "../../lib/storeUsuario";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const Chat = () => {
+const Chat = ({ onToggleLista }) => {
   const [abrir, setAbrir] = useState(false);
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
@@ -173,6 +173,7 @@ const Chat = () => {
                     </div>}
                 </span>
               </div>
+              <button className="screen" onClick={onToggleLista}>Screen</button> 
             </div>
           </div>
           <div className="center">
