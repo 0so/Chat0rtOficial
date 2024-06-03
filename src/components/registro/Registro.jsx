@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../lib/firebase";
 import getPublicIP from "../../util/util";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDocs, query, collection, where } from "firebase/firestore";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import emailjs from "emailjs-com";
 import "./registro.css";
@@ -21,6 +21,7 @@ const Registro = () => {
     setFormData(formData);
 
     const username = formData.get("username");
+    const email = formData.get("email");
 
     try {
       // Validar el nombre de usuario
@@ -36,6 +37,25 @@ const Registro = () => {
       }
       if (/\s/.test(username)) {
         toast.error("El nombre de usuario no puede contener espacios");
+        setCargando(false);
+        return;
+      }
+
+      // Verificar si el nombre de usuario o el correo electrónico ya existen
+      const usernameQuery = query(collection(db, "usuarios"), where("usuario", "==", username));
+      const emailQuery = query(collection(db, "usuarios"), where("email", "==", email));
+
+      const usernameSnapshot = await getDocs(usernameQuery);
+      const emailSnapshot = await getDocs(emailQuery);
+
+      if (!usernameSnapshot.empty) {
+        toast.error("El username ya está en uso");
+        setCargando(false);
+        return;
+      }
+
+      if (!emailSnapshot.empty) {
+        toast.error("El email ya está en uso");
         setCargando(false);
         return;
       }
@@ -127,12 +147,7 @@ const Registro = () => {
                       amount: {
                         value: "0.01"
                       },
-                      custom_id: "user_registration",
-                      custom_fields: {
-                        username: formData.get("username"),
-                        email: formData.get("email"),
-                        password: formData.get("password")
-                      }
+                      custom_id: "user_registration"
                     }
                   ]
                 });
