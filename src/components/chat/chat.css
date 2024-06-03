@@ -205,12 +205,18 @@
     /* Mostrar puntos suspensivos (...) si el texto es demasiado largo */
 }
 
+.chat .center .mensaje .texts .hora {
+    font-size: 0.8em;
+    color: yellow;
+    margin-left: 10px;
+}
+
 .no-chat-selected {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
     height: 100%;
-    color: white; 
+    color: white;
     font-size: 33px;
 }

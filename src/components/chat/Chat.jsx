@@ -1,4 +1,3 @@
-// Chat.jsx
 import { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
@@ -147,6 +146,11 @@ const Chat = ({ onToggleLista }) => {
     }
   };
 
+  const formatearHora = (fecha) => {
+    const opciones = { hour: '2-digit', minute: '2-digit' };
+    return new Date(fecha.seconds * 1000).toLocaleTimeString([], opciones);
+  };
+
   return (
     <div className='chat'>
       {!idChat ? (
@@ -178,10 +182,11 @@ const Chat = ({ onToggleLista }) => {
           </div>
           <div className="center">
             {chat?.mensajes?.map(mensaje => (
-              <div className={mensaje.emisorId === usuarioActual?.id ? "mensaje propio" : "mensaje"} key={mensaje?.creadoA}>
+              <div className={mensaje.emisorId === usuarioActual?.id ? "mensaje propio" : "mensaje"} key={mensaje?.creadoA?.seconds}>
                 <div className="texts">
                   {mensaje.imageUrl && <img src={mensaje.imageUrl} alt="Imagen" />}
                   <p>{mensaje.text}</p>
+                  <span className="hora">{formatearHora(mensaje.creadoA)}</span>
                 </div>
               </div>
             ))}
